@@ -1,57 +1,45 @@
 #include <stdio.h>
 
-void merge(int *left, int L, int *right, int R, int *array){
-    int i=0, j=0, k=0;
-    while(i<L && j<R){
-        if(left[i]<=right[j]){
-            array[k] = left[i];
-            i++;
+void merge(int *array, int l, int r){
+    int temp[l+r+1];
+    for(int i=l;i<=r;i++){
+        temp[i] = array[i];
+    }
+    int mid = (l+r)/2;
+    int i1 = l, i2 = mid+1;
+    for(int curr=l;curr<=r;curr++){
+        if(i1==(mid+1)){
+            array[curr] = temp[i2++];
+        }
+        else if(i2>r){
+            array[curr] = temp[i1++];
+        }
+        else if(temp[i1] <= temp[i2]){
+            array[curr] = temp[i1++];
         }
         else{
-            array[k] = right[j];
-            j++;
-        }
-        k++;
-    }
-    if(i==L){
-        for(int p=j;p<R;p++){
-            array[k] = right[p];
-            k++;
-        }
-    }
-    else{
-        for(int p=i;p<L;p++){
-            array[k] = left[p];
-            k++;
+            array[curr] = temp[i2++];
         }
     }
 }
 
-void merge_sort(int *array, int n){
-    int m1 = n/2;
-    int m2 = n - m1;
-    int left[m1], right[m2];
-
-    if(n>1){
-        for(int i=0;i<m1;i++){
-            left[i] = array[i];
-        }
-        for(int j=0;j<m2;j++){
-            right[j] = array[j+m1];
-        }
-        merge_sort(left, m1);
-        merge_sort(right, m2);
-        merge(left, m1, right, m2, array);
+void merge_sort(int *array, int l, int r){
+    int mid = (l+r)/2;
+    if(l<r){
+        merge_sort(array, l, mid);
+        merge_sort(array,mid+1, r);
+        merge(array, l, r);
     }
 }
+
 
 
 int main(){
 
     int n = 5;
-    int teste[5] = {2,3,1,5,4};
+    int teste[5] = {5,2,1,7,0};
 
-    merge_sort(teste, n);
+    merge_sort(teste, 0, n-1);
     
     for(int i=0;i<n;i++){
         printf("%d\n", teste[i]);
