@@ -58,7 +58,7 @@ void mergesort(char array[][31],  int l,  int r){
 int main(){
      int n;
     
-    scanf("%lld", &n);
+    scanf("%d", &n);
     char alunos[n][31];
 
     for( int i=0;i<n;i++){
@@ -69,7 +69,7 @@ int main(){
 
      int q;
     char aluno_desejado[31];
-    scanf("%lld", &q);
+    scanf("%d", &q);
 
     for( int i=0;i<q;i++){
         scanf(" %s\n", aluno_desejado);
