@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
- int bs_string(char array[][31],  int n, char key[31]){
-     int l = 0, r = n-1;
+int bs_string(char array[][31], int n, char key[31]){
+    int l = 0, r = n-1;
     while(l<=r){
-         int m = (l+r)/2;
+        int m = (l+r)/2;
         if(strcmp(key, array[m])==0){
             return m;
         }
@@ -19,7 +19,7 @@
 }
 
 int main(){
-     int n;
+    int n;
     
     scanf("%d", &n);
     char alunos[n][31];
@@ -28,13 +28,13 @@ int main(){
         scanf(" %s\n", alunos[i]);
     }
 
-     int q;
+    int q;
     char aluno_desejado[31];
     scanf("%d", &q);
 
-    for( int i=0;i<q;i++){
+    for(int i=0;i<q;i++){
         scanf(" %s\n", aluno_desejado);
-         int result = bs_string(alunos, n, aluno_desejado);
+        int result = bs_string(alunos, n, aluno_desejado);
 
         if(result != -1){
             printf("+\n");
