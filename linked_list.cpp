@@ -70,11 +70,13 @@ char Remove(List *l){
     if(l->curr->next == NULL){
         return '\0';//return NULL
     }
+    Node *tmp = l->curr->next;
     char value = l->curr->next->value;
     if(l->tail == l->curr->next){
         l->tail = l->curr;
     }
     l->curr->next = l->curr->next->next;
+    delete tmp;
     l->length--;
     return value;
 }
