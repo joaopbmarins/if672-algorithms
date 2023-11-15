@@ -90,28 +90,54 @@ void Delete_List(List *l){
     delete l;
 }
 
-void Print_list(List *l){
-    Node *tmp = l->head;
-    while(tmp->next != NULL){
-        cout << tmp->next->value << endl;
-        tmp = tmp->next;
-    }
-}
-
-
 int main(){
+    
+    int c, n;
+    cin >> c;
+    string comando;
+    
+    for(int i=0;i<c;i++){
+        cin >> n;
+        List *lista = Create_list();
+        
+        cout << "Case " << c << ":" <<  endl;
+        
+        for(int i=0;i<n;i++){
+            cin >> comando;
+            if(comando == "insert"){
+                int value;
+                cin >> value;
+                Insert(lista, value);
+            }
+            else if(comando == "remove"){
+                Remove(lista);
+            }
+            else if(comando == "prev"){
+                Prev(lista);
+            }
+            else if(comando == "next"){
+                Next(lista);
+            }
+            else if(comando == "count"){
+                int value, count=0;
+                cin >> value;
+                Node *tmp = lista->head->next;
 
-    List *lista = Create_list();
+                for(int i=0;i<lista->length;i++){
+                    if(tmp->value == value){
+                        count++;
+                    }
+                    tmp = tmp->next;
+                }
+                
+                cout << count << endl;
+            }
+        
+        }    
+        Delete_List(lista);
+    }
 
-    Insert (lista, '1');
-    Insert (lista, '2');
-    Insert (lista, '3');
-
-    Print_list(lista);
-
-    Delete_List(lista);
-
-
+    
 
     return 0;
 }

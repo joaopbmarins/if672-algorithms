@@ -45,3 +45,5 @@
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+teste.cpp

@@ -1,0 +1,16 @@
+1
+14
+insert 2
+insert 5
+insert 2
+insert 1
+count 2
+next
+remove
+count 2
+remove
+count 5
+next
+next
+remove
+count 1
