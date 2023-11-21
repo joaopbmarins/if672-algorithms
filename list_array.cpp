@@ -76,6 +76,7 @@ int main(){
 
     Insert (lista, '1');
     Insert (lista, '2');
+    Remove (lista);
     Insert (lista, '3');
 
     for(int i=0;i<lista->listSize;i++){

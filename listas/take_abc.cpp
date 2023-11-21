@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+#define endl "\n"
 
 typedef struct Node{
   char value;
@@ -59,16 +60,31 @@ void Delete_Stack(Stack *s){
 
 int main (){
 
-    Stack *pilha = Create_Stack();
+  Stack *s = Create_Stack();
 
-    Push(pilha, '1');
-    Push(pilha, '2');
-    Pop(pilha);
-    Push(pilha, '3');
+  string frase;
 
-    cout << pilha->top->value << endl;
+  cin >> frase;
+  for(int i=frase.size()-1;i>=0;i--){
+    Push(s, frase[i]);
+    if(s->size >= 3){
+      if(s->top->value == 'A' && s->top->next->value == 'B' && s->top->next->next->value == 'C'){
+        for(int i=0;i<3;i++){
+          Pop(s);
+          }
+      }
+    }
+  }
 
-    Delete_Stack(pilha);
+  
+  int size = s->size;
+  for(int i=0;i<size;i++){
+      cout << Pop(s);
+  }
+    
+  cout << endl;
+
+  Delete_Stack(s);
 
 
 

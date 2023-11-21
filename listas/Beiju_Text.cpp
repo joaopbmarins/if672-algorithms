@@ -95,25 +95,38 @@ void Delete_List(List *l){
 void Print_list(List *l){
     Node *tmp = l->head;
     while(tmp->next != NULL){
-        cout << tmp->next->value << endl;
+        cout << tmp->next->value;
         tmp = tmp->next;
     }
+    if(l->length != 0)
+        cout << "\n";
 }
 
 
 int main(){
 
-    List *lista = Create_list();
+    
 
-    Insert (lista, '1');
-    Insert (lista, '2');
-    Remove (lista);
-    Insert (lista, '3');
+    string frase;
 
-    Print_list(lista);
+    while(cin >> frase){
+        List *lista = Create_list();
+        for(int i=0;i<frase.size();i++){
+            if(frase[i] == '['){
+                MoveToStart(lista);
+            }
+            else if(frase[i] == ']'){
+                MoveToEnd(lista);
 
-    Delete_List(lista);
-
+            }
+            else{
+                Insert(lista, frase[i]);
+                Next(lista);
+            }
+        }
+        Print_list(lista);
+        Delete_List(lista);
+    }
 
 
     return 0;
