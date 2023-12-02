@@ -2,6 +2,12 @@
 using namespace std;
 #define endl "\n"
 
+/*
+HashTable Questao da monitoria
+Closed Hashing PseudoRandom Probing
+
+*/
+
 typedef struct Pessoa{
     string nome;
     string cpf;
@@ -34,6 +40,9 @@ int Find_HT(Pessoa **table, int n, string key, int perm[]){
 
 void Add_HT(Pessoa **table, int n, Pessoa *add, int perm[]){
     int index = Hash(add->cpf, n);
+    if(Find_HT(table, n, add->cpf, perm) != -1){
+        return;
+    }
     if(table[index] == NULL){
         table[index] = add;
         count++;
