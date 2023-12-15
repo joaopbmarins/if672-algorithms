@@ -23,7 +23,7 @@ int Find_HT(HT **table, string key){
         return index;
     }
     int tmp;
-    for(int i=1;i<=19;i++){
+    for(int i=1;i<=19;i++){//teste da colisao
         tmp = (index + i*i + 23 * i) % 101;
         if(table[tmp] != NULL && table[tmp]->key == key){
             return tmp;
@@ -43,7 +43,7 @@ void Insert_HT(HT **table, HT *add){
         return;
     }
     int tmp;
-    for(int i=1;i<=19;i++){//colisao
+    for(int i=1;i<=19;i++){//testa da colisao
         tmp = (index + i*i + 23 * i) % 101;
         if(table[tmp] == NULL){
             table[tmp] = add;
@@ -58,13 +58,11 @@ HT* Remove_HT(HT **table, string key){
     if(busca == -1){//se ele nn acha a chave na tabela nao tem oq remover
         return NULL;
     }
-    else{
-        if(table[busca]->key == key){//teste extra provavelmente desnecessario 
-            HT *tmp = table[busca];
-            table[busca] = NULL;
-            count--;
-            return tmp;
-        }
+    else{//achou na tabela e agora vai remover
+        HT *tmp = table[busca];
+        table[busca] = NULL;
+        count--;
+        return tmp;
     }
     return NULL;
 }
