@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cmath>
 using namespace std;
 #define endl "\n"
 
@@ -44,7 +43,7 @@ void Insert_HT(HT **table, HT *add){
         return;
     }
     int tmp;
-    for(int i=1;i<=19;i++){
+    for(int i=1;i<=19;i++){//colisao
         tmp = (index + i*i + 23 * i) % 101;
         if(table[tmp] == NULL){
             table[tmp] = add;
@@ -55,37 +54,18 @@ void Insert_HT(HT **table, HT *add){
 }
 
 HT* Remove_HT(HT **table, string key){
-    int index = h(key);
     int busca = Find_HT(table, key);
-    if(busca == -1){//se ele achar a chave na tabela nao pode adicionar
+    if(busca == -1){//se ele nn acha a chave na tabela nao tem oq remover
         return NULL;
     }
     else{
-        if(table[busca]->key == key){
+        if(table[busca]->key == key){//teste extra provavelmente desnecessario 
             HT *tmp = table[busca];
             table[busca] = NULL;
             count--;
             return tmp;
         }
     }
-    
-    /*
-    if(table[index] != NULL){//teste com o indice da hashf
-        HT *doce = table[index]; 
-        table[index] = NULL;
-        count--;
-        return doce;
-    }
-    int tmp;
-    for(int i=1;i<=19;i++){
-        tmp = (index + i*i + 23 * i) % 101;
-        if(table[tmp] != NULL){//teste com o pseudo random probing
-             HT *doce = table[tmp]; 
-            table[tmp] = NULL;
-            count--;
-            return doce;
-        }
-    }*/
     return NULL;
 }
 
