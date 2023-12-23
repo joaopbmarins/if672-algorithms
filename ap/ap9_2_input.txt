@@ -1,0 +1,15 @@
+5 14
+max
+remove
+insert c
+insert b
+max
+insert d
+max
+insert e
+insert A
+insert z
+max
+remove
+remove
+max
