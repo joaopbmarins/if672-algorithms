@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 using namespace std;
 #define endl "\n"
 
@@ -46,7 +47,7 @@ int getBalance(BSTNode *rt){
     if(rt == NULL){
         return 0;
     }
-    return h(rt->left) - h(rt->right);
+    return (h(rt->left) - h(rt->right));
 }
 
 typedef struct BST{
@@ -85,7 +86,7 @@ BSTNode *rightRotate(BSTNode *rt){
     BSTNode *lr = l->right;
     l->right = rt;
     rt->left = lr;
-    rt->height = max(h(rt->left), h(rt->right)) +1;
+    rt->height = max(h(rt->left), h(rt->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
     return l;
 }
@@ -95,7 +96,7 @@ BSTNode *leftRotate(BSTNode *rt){
     BSTNode *rl = r->left;
     r->left = rt;
     rt->right = rl;
-    rt->height = max(h(rt->left), h(rt->right)) +1;
+    rt->height = max(h(rt->left), h(rt->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
     return r;
 }
@@ -171,27 +172,20 @@ int Remove(BST *bst, int key){
     return tmp;
 }
 
-void PreOrder(BSTNode *rt){
-    if(rt != NULL){
-        cout << " " << rt->element;
-        PreOrder(rt->left);
-        PreOrder(rt->right);
-    }
-}
+int posi = 0;
+//vector<int> array;
 
-void InOrder(BSTNode *rt){
-    if(rt != NULL){
-        InOrder(rt->left);
-        cout << " " << rt->element;
-        InOrder(rt->right);
-    }
-}
-
-void PosOrder(BSTNode *rt){
-    if(rt != NULL){
-        PosOrder(rt->left);
-        PosOrder(rt->right);
-        cout << " " << rt->element;
+void InOrder(BSTNode *rt, int key, bool &Achou){
+    if(rt != NULL && !Achou){
+        InOrder(rt->left, key, Achou);
+        posi++;
+        //array.push_back(rt->key);
+        if(rt->key == key){
+            Achou = true;
+            cout << posi << endl;
+            return;
+        }
+        InOrder(rt->right, key, Achou);
     }
 }
 
@@ -200,30 +194,28 @@ int main(){
 
     BST *bst = CreateBST();
     int n;
-    cin >> n;
+    scanf("%d", &n);
     for(int i=0;i<n;i++){
-        string comando;
-        cin >> comando;
-        if(comando == "insert"){
-            int tmp;
-            cin >> tmp;
-            Insert(bst, tmp, tmp);
+        int oper, value;
+        scanf("%d %d", &oper, &value);
+        if(oper == 1){//insert
+            Insert(bst, value, value);
         }
-        else if(comando == "pre"){
-            PreOrder(bst->root);
-            cout << endl;
-        }
-        else if(comando == "in"){
-            InOrder(bst->root);
-            cout << endl;
-
-        }
-        else if(comando == "post"){
-            PosOrder(bst->root);
-            cout << endl;
+        else if(oper == 2){//find
+            bool Achou = false;
+            InOrder(bst->root, value, Achou);
+            //remover dps
+            //for(auto i: array) cout << i << " ";
+            //cout << endl;
+            //array.clear();
+            //
+            if(!Achou){
+                cout << "Data tidak ada" << endl;
+            }
+            posi = 0;
         }
     }
-
+    
 
     return 0;
 }
