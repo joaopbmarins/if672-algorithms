@@ -227,24 +227,3 @@ int main(){
 
     return 0;
 }
-            cin >> tmp;
-            Insert(bst, tmp, tmp);
-        }
-        else if(comando == "pre"){
-            PreOrder(bst->root);
-            cout << endl;
-        }
-        else if(comando == "in"){
-            InOrder(bst->root);
-            cout << endl;
-
-        }
-        else if(comando == "post"){
-            PosOrder(bst->root);
-            cout << endl;
-        }
-    }
-
-
-    return 0;
-}
