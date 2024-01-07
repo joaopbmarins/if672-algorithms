@@ -64,37 +64,6 @@ BSTNode *findhelp(BSTNode *rt, int k){
     }
 }
 
-/*
-int tmp = 1;
-void RankHelp(BSTNode *rt){
-    if(rt->left == NULL){
-        return;
-    }
-    else{
-        tmp++;
-        RankHelp(rt->left);
-    }
-    if(rt->right == NULL){
-        return;
-    }
-    else{
-        tmp++;
-        RankHelp(rt->right);
-    }
-}
-
-void Rank(BSTNode *rt){
-    tmp = 1;
-    if(rt->left != NULL){
-        tmp++;
-        RankHelp(rt->left);
-    }
-    else if(rt->right != NULL){
-        tmp++;
-        RankHelp(rt->right);
-    }
-}*/
-
 int Rank(BSTNode *rt){
     if(rt == NULL){
         return 0;
@@ -109,8 +78,8 @@ BSTNode *rightRotate(BSTNode *rt){
     rt->left = lr;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
-    rt->rank= Rank(rt->left) + Rank(rt->right) +1;
-    l->rank = Rank(l->left) + Rank(l->right) +1;
+    rt->rank= Rank(rt->left) +1;//+ Rank(rt->right) 
+    l->rank = Rank(l->left) +1;//+ Rank(l->right) 
     return l;
 }
 
@@ -121,13 +90,13 @@ BSTNode *leftRotate(BSTNode *rt){
     rt->right = rl;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
-    rt->rank= Rank(rt->left) + Rank(rt->right) +1;//
-    r->rank = Rank(r->left) + Rank(r->right) +1;  //Rank(rt) +1;//Rank(r->left) + Rank(r->right)
+    rt->rank= Rank(rt->left) +1;//+ Rank(rt->right) 
+    r->rank = Rank(r->left) +1;//+ Rank(r->right) 
     return r;
 }
 
 BSTNode *inserthelp(BSTNode *rt, int k, int e){
-    if(rt == NULL){
+    if(rt == NULL){       
         return CreateBSTnode(k, e);
     }
     if(rt->key > k){
@@ -135,6 +104,7 @@ BSTNode *inserthelp(BSTNode *rt, int k, int e){
         rt->left = inserthelp(rt->left, k, e);
     }
     else{
+        cout << rt->rank;
         rt->right = inserthelp(rt->right, k , e);
     }
 
@@ -165,10 +135,11 @@ void Insert(BST *bst, int key, int element){
 }
 
 int posi = 0;
-
+vector<int> array;
 void InOrder(BSTNode *rt, int key, bool &Achou){
     if(rt != NULL && !Achou){
         InOrder(rt->left, key, Achou);
+        array.push_back(rt->key);
         if(Achou) return;
         posi++;
         if(rt->key == key){
@@ -192,24 +163,29 @@ int main(){
 
         if(oper == 1){//insert
             Insert(bst, value, value);
+            BSTNode *ptr = findhelp(bst->root, value);
+            printf("Rank: %d, Value: %d\n", ptr->rank, ptr->element);
         }
 
         else if(oper == 2){//find
             bool Achou = false;
             BSTNode *node = findhelp(bst->root, value);
+            InOrder(bst->root, value, Achou);
             if(node != NULL){
-                InOrder(bst->root, value, Achou);
-                //cout << posi << endl;
-                cout << node->rank << endl;
+                
+                printf("Value:%d, Rank:%d, Posi:%d\n", node->element, node->rank, posi);
                 if(posi != node->rank){
                     cout << "algo está errado" << endl;
                 }
             }
             else{
                 cout << "Data tidak ada" << endl;
+                for(auto i: array) printf("%d ", i);
+                cout << endl;   
             }
             posi = 0;
         }
+        array.clear();
         n--;
     }
 
