@@ -8,7 +8,8 @@ typedef struct BSTNode{
     int key;
     int element;
     int height;
-    int rank;
+    int sonsL; 
+    int sonsR;
     struct BSTNode *left;
     struct BSTNode *right;
 }BSTNode;
@@ -19,7 +20,8 @@ BSTNode *CreateBSTnode(int k, int e){
     node->key = k;
     node->left = node->right = NULL;
     node->height = 0;
-    node->rank = 1;
+    node->sonsL = 0;
+    node->sonsR = 0;
     return node;
 }
 
@@ -64,11 +66,18 @@ BSTNode *findhelp(BSTNode *rt, int k){
     }
 }
 
-int Rank(BSTNode *rt){
+int SonsL(BSTNode *rt){
     if(rt == NULL){
         return 0;
     }
-    return rt->rank;
+    return rt->sonsL;
+}
+
+int SonsR(BSTNode *rt){
+    if(rt == NULL){
+        return 0;
+    }
+    return rt->sonsR;
 }
 
 BSTNode *rightRotate(BSTNode *rt){
@@ -78,8 +87,7 @@ BSTNode *rightRotate(BSTNode *rt){
     rt->left = lr;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
-    rt->rank= Rank(rt->left) +1;//+ Rank(rt->right) 
-    l->rank = Rank(l->left) +1;//+ Rank(l->right) 
+    rt->sonsL = 
     return l;
 }
 
@@ -90,8 +98,6 @@ BSTNode *leftRotate(BSTNode *rt){
     rt->right = rl;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
-    rt->rank= Rank(rt->left) +1;//+ Rank(rt->right) 
-    r->rank = Rank(r->left) +1;//+ Rank(r->right) 
     return r;
 }
 
@@ -100,15 +106,11 @@ BSTNode *inserthelp(BSTNode *rt, int k, int e){
         return CreateBSTnode(k, e);
     }
     if(rt->key > k){
-        rt->rank = Rank(rt) +1;//toda vez q eu navego para esquerda preciso adicionar um no rank
         rt->left = inserthelp(rt->left, k, e);
     }
     else{
-        cout << rt->rank;
         rt->right = inserthelp(rt->right, k , e);
     }
-
-    //rt->rank = Rank(rt) +1;//+ Rank(rt->right) 
 
     rt->height = 1 + max(h(rt->left), h(rt->right));
     int balance = getBalance(rt);
@@ -164,7 +166,7 @@ int main(){
         if(oper == 1){//insert
             Insert(bst, value, value);
             BSTNode *ptr = findhelp(bst->root, value);
-            printf("Rank: %d, Value: %d\n", ptr->rank, ptr->element);
+            printf("SonL: %d, SonR: %d, Value: %d\n", ptr->sonsL, ptr->sonsR, ptr->element);
         }
 
         else if(oper == 2){//find
@@ -173,10 +175,11 @@ int main(){
             InOrder(bst->root, value, Achou);
             if(node != NULL){
                 
-                printf("Value:%d, Rank:%d, Posi:%d\n", node->element, node->rank, posi);
+                printf("Value:%d, SonL: %d, SonR: %d, Posi:%d\n", node->element, node->sonsL, node->sonsR, posi);
+                /*
                 if(posi != node->rank){
                     cout << "algo está errado" << endl;
-                }
+                }*/
             }
             else{
                 cout << "Data tidak ada" << endl;
