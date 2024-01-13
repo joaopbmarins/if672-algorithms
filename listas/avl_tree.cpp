@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <vector>
 using namespace std;
 #define endl "\n"
 
@@ -8,8 +7,7 @@ typedef struct BSTNode{
     int key;
     int element;
     int height;
-    int sonsL; 
-    int sonsR;
+    int size;
     struct BSTNode *left;
     struct BSTNode *right;
 }BSTNode;
@@ -20,8 +18,7 @@ BSTNode *CreateBSTnode(int k, int e){
     node->key = k;
     node->left = node->right = NULL;
     node->height = 0;
-    node->sonsL = 0;
-    node->sonsR = 0;
+    node->size = 1;
     return node;
 }
 
@@ -51,34 +48,31 @@ BST *CreateBST(){
     return bst;
 }
 
+int Size_n(BSTNode *rt){
+    if(rt == NULL){
+        return 0;
+    }
+    return rt->size;
+}
+
+int indice = 0;
 BSTNode *findhelp(BSTNode *rt, int k){
     if(rt == NULL){
-        return NULL;//erro arvore nula
+        return NULL;
     }
     if(rt->key > k){
         return findhelp(rt->left, k);
     }
     else if(rt->key == k){
+        indice += Size_n(rt->left) + 1;
         return rt;
     }
     else{
+        indice += Size_n(rt->left) + 1;
         return findhelp(rt->right, k);
     }
 }
 
-int SonsL(BSTNode *rt){
-    if(rt == NULL){
-        return 0;
-    }
-    return rt->sonsL;
-}
-
-int SonsR(BSTNode *rt){
-    if(rt == NULL){
-        return 0;
-    }
-    return rt->sonsR;
-}
 
 BSTNode *rightRotate(BSTNode *rt){
     BSTNode *l = rt->left;
@@ -87,7 +81,8 @@ BSTNode *rightRotate(BSTNode *rt){
     rt->left = lr;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
-    rt->sonsL = 
+    rt->size = Size_n(rt->left) + Size_n(rt->right) + 1;
+    l->size = Size_n(l->left) + Size_n(l->right) + 1;
     return l;
 }
 
@@ -98,6 +93,8 @@ BSTNode *leftRotate(BSTNode *rt){
     rt->right = rl;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
+    rt->size = Size_n(rt->left) + Size_n(rt->right) + 1;
+    r->size = Size_n(r->left) + Size_n(r->right) + 1;
     return r;
 }
 
@@ -112,6 +109,7 @@ BSTNode *inserthelp(BSTNode *rt, int k, int e){
         rt->right = inserthelp(rt->right, k , e);
     }
 
+    rt->size = Size_n(rt->left) + Size_n(rt->right) + 1;
     rt->height = 1 + max(h(rt->left), h(rt->right));
     int balance = getBalance(rt);
     if(balance < -1 && k >= rt->right->key){
@@ -128,6 +126,7 @@ BSTNode *inserthelp(BSTNode *rt, int k, int e){
         rt->right = rightRotate(rt->right);
         return leftRotate(rt);
     }
+    
     return rt;
 }
 
@@ -135,23 +134,7 @@ void Insert(BST *bst, int key, int element){
     bst->root = inserthelp(bst->root, key, element);
     bst->node_count++;
 }
-
-int posi = 0;
-vector<int> array;
-void InOrder(BSTNode *rt, int key, bool &Achou){
-    if(rt != NULL && !Achou){
-        InOrder(rt->left, key, Achou);
-        array.push_back(rt->key);
-        if(Achou) return;
-        posi++;
-        if(rt->key == key){
-            Achou = true;
-            return;
-        }
-        InOrder(rt->right, key, Achou);
-    }
-}
-
+ 
 
 
 int main(){
@@ -162,33 +145,19 @@ int main(){
     while(n>0){
         int oper, value;
         scanf("%d %d", &oper, &value);
-
+        indice = 0;
         if(oper == 1){//insert
             Insert(bst, value, value);
-            BSTNode *ptr = findhelp(bst->root, value);
-            printf("SonL: %d, SonR: %d, Value: %d\n", ptr->sonsL, ptr->sonsR, ptr->element);
         }
-
         else if(oper == 2){//find
-            bool Achou = false;
             BSTNode *node = findhelp(bst->root, value);
-            InOrder(bst->root, value, Achou);
             if(node != NULL){
-                
-                printf("Value:%d, SonL: %d, SonR: %d, Posi:%d\n", node->element, node->sonsL, node->sonsR, posi);
-                /*
-                if(posi != node->rank){
-                    cout << "algo está errado" << endl;
-                }*/
+                cout << indice << "\n";
             }
             else{
                 cout << "Data tidak ada" << endl;
-                for(auto i: array) printf("%d ", i);
-                cout << endl;   
             }
-            posi = 0;
         }
-        array.clear();
         n--;
     }
 
