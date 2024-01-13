@@ -50,13 +50,26 @@ void heapify(vector<int> &h, int size, int k){//reorganiza ela
 
 }
 
-void delete_heap(vector<int> &h, int size){
-    for(int i=size-1;i>1;i--){
-        swap(h[1], h[i]);
-        size--;
-        heapify(h,size,1);
+void remove_heap(vector <int> &h){
+    int last_elem = h.size() - 1;
+    swap(h[1], h[last_elem]);
+    h.pop_back();
+    heapify(h, h.size(), 1);
+
+}
+
+void HeapTopDown(vector<int> &h, int add){
+    h.push_back(add);
+    int size = h.size();
+    int s = size-1;
+    int d = s/2;
+    while(h[d] > h[s] && s > 1){
+        swap(h[d], h[s]);
+        s = d;
+        d = s/2;
     }
 }
+
 int main(){
     int n;
     cin >> n;
@@ -66,22 +79,15 @@ int main(){
         for(int i=1;i<=n;i++){
             cin >> vet[i];
         }
-        HeapBottomUp(vet, vet.size());
+        HeapBottomUp(vet, n+1);
         int cost = 0;
         while(n > 1){
-            delete_heap(vet, vet.size());
-            //for(auto i : vet) cout << i << " ";
-            //cout << endl;
-            int add = vet[vet.size()-1];
-            //printf(" add:%d size:%d\n", add, vet.size());
-            vet.pop_back();
-            add += vet[vet.size()-1];
-            //printf(" add:%d size:%d\n", add, vet.size());
-            vet.pop_back();
+            int add = vet[1];
+            remove_heap(vet);
+            add += vet[1];
+            remove_heap(vet);
             cost += add;
-            //printf("cost:%d, add:%d, size:%d\n", cost, add, vet.size());
-            vet.push_back(add);
-            HeapBottomUp(vet, vet.size());
+            HeapTopDown(vet, add);
             n--;
         }
         
@@ -90,9 +96,5 @@ int main(){
         cin >> n;
     }
     
-
-
-
-
     return 0;
 }
