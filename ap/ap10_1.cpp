@@ -1,8 +1,9 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 using namespace std;
 #define UNVISITED 0
-#define VISTED 1
+#define VISITED 1
 
 typedef struct{
     int **matrix;
@@ -66,7 +67,7 @@ void delEdge(Graph *g, int i, int j){
 void DFS(Graph *g, int v){
     //preVisit
     cout << v << " ";
-    setMark(g, v, VISTED);
+    setMark(g, v, VISITED);
     int w = first(g, v);
     while(w < g->numNode){
         if(getMark(g, w) == UNVISITED){
@@ -80,7 +81,7 @@ void DFS(Graph *g, int v){
 void BFS(Graph *g, int start){
     queue<int> q;
     q.push(start);
-    setMark(g, start, VISTED);
+    setMark(g, start, VISITED);
     while(q.size() > 0){
         int v = q.front();
         q.pop();
@@ -89,7 +90,7 @@ void BFS(Graph *g, int start){
         int w = first(g, v);
         while(w < g->numNode){
             if(getMark(g, w) == UNVISITED){
-                setMark(g, w, VISTED);
+                setMark(g, w, VISITED);
                 q.push(w);
             }
             w = next(g, v, w);
@@ -132,6 +133,18 @@ void graphTraverse(Graph *g, const bool &bfs, int start){
     }
 }
 
+void toposort(Graph *g, int v, stack<int> &s){
+    setMark(g, v, VISITED);
+    int w = first(g, v);
+    while(w < g->numNode){
+        if(getMark(g,w) == UNVISITED){
+            toposort(g,w,s);
+        }
+        w = next(g,v,w);
+    }
+    s.push(v);
+}
+
 int main(){
 
     int n, q;
@@ -139,13 +152,14 @@ int main(){
 
     Graph *g = create_graph(n);
 
-    while(q>=0){
+    while(q>0){
         string comando;
         cin >> comando;
         if(comando == "add"){
             int i,j;
             cin >> i >> j;
             setEdge(g, i, j, 1);
+            setEdge(g, j, i, 1);
         }
         else if(comando == "BFS"){
             int v;
@@ -161,6 +175,19 @@ int main(){
         }
         q--;
     }
+/* //Topological Sort
+    for(int i=0;i<n;i++){
+        setMark(g,i,UNVISITED);
+    }
+    stack<int> s;
+    toposort(g, 0, s);
+
+    while(!s.empty()){
+        cout << s.top() << " ";
+        s.pop();
+    }
+    cout << endl;
+*/
 
     return 0;
 }
