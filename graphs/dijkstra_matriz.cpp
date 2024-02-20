@@ -10,13 +10,14 @@ NÃO FUNCIONA
 
 */
 
-typedef pair<int,int> pint;
+typedef pair<int,pair<int,int>> superPair;
 
 typedef struct{
     int **matrix;
     int numEdge;
     bool *Mark;
     int *Dist;
+    int *Parent;
     int numNode;
 }Graph;
 
@@ -33,6 +34,7 @@ Graph *create_graph(const int n){
     g->numNode = n;
     g->Mark = new bool[n]();
     g->Dist = new int[n];
+    g->Parent = new int[n];
     g->matrix = new int*[n];
     for(int i=0;i<n;i++){
         g->matrix[i] = new int[n]();
@@ -84,27 +86,32 @@ void Dijkstra(Graph *g, int start){
     }
     g->Dist[start] = 0;
 
-    priority_queue<pint, vector<pint>, greater<pint>> heap;
-    heap.push({g->Dist[start], start});
+    priority_queue<superPair, vector<superPair>, greater<superPair>> heap;
+    heap.push({g->Dist[start], {start, start}});
 
-    while(heap.size()>0){
-        pint v = heap.top();
-        int vindex = v.second;
-        heap.pop();
-        if(getMark(g, vindex) == UNVISITED){
-            setMark(g, vindex, VISITED);
-            int w = first(g, vindex);
-            while(w<g->numNode){
-                if(g->Dist[w] > g->Dist[vindex] + weight(g, vindex, w)){
-                    g->Dist[w] = g->Dist[vindex] + weight(g, vindex, w);
-                    heap.push({g->Dist[w], w});
-                }
-                next(g, vindex, w);
+    for(int i=0;i<g->numNode;i++){
+        superPair heapTop;
+        do{
+            if(heap.size() == 0)
+                return;
+            heapTop = heap.top();
+            heap.pop();
+            
+        }while(!(getMark(g,heapTop.second.second) == UNVISITED));
+        int v = heapTop.second.second;
+        setMark(g, v, VISITED);
+        g->Parent[v] = heapTop.second.first;
+        int w = first(g, v);
+        while(w<g->numNode){
+            if(getMark(g,w) != VISITED && g->Dist[w] > g->Dist[v] + weight(g, v, w)){
+                g->Dist[w] = g->Dist[v] + weight(g, v, w);
+                heap.push({g->Dist[w], {v,w}});
             }
+            w = next(g, v, w);
         }
+        
     }
 
-    
 }
 
 int main(){

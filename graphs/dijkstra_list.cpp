@@ -5,11 +5,14 @@ using namespace std;
 #define INF 1000000
 
 typedef pair<int,int> pint;
+typedef pair<int,pair<int,int>> superPair;
+
 
 typedef struct Graph{
     vector<pint> *array;//par é <nó, peso>
     bool *Mark;
     int *dist;
+    int *parent;
     int numEdge;
     int numNode;
 }Graph;
@@ -29,6 +32,7 @@ Graph *create_graph(int n){
     g->Mark = new bool[n]();
     g->array = new vector<pint>[n];
     g->dist = new int[n];
+    g->parent = new int[n];
     return g;
 }
 
@@ -37,7 +41,8 @@ void setEdge(Graph *g, int i, int j, int wt){
     return;
 }
 
-void Dijkstra(Graph *g, int start){
+
+void Dijkstra(Graph *g, int start, bool outraVersao){
     for(int i=0;i<g->numNode;i++){
         setMark(g, i, UNVISITED);
         g->dist[i] = INF;
@@ -63,6 +68,43 @@ void Dijkstra(Graph *g, int start){
                 }
             }
         }
+    }
+
+}
+
+
+void Dijkstra(Graph *g, int start){
+    for(int i=0;i<g->numNode;i++){
+        setMark(g, i, UNVISITED);
+        g->dist[i] = INF;
+    }
+    g->dist[start] = 0;
+
+    priority_queue<superPair, vector<superPair>, greater<superPair>> heap;
+    heap.push({g->dist[start], {start, start}});
+
+    for(int i=0;i<g->numNode;i++){
+        superPair heapTop;
+        do{
+            if(heap.size() == 0)
+                return;
+            heapTop = heap.top();
+            heap.pop();
+            
+        }while(!(getMark(g,heapTop.second.second) == UNVISITED));
+        int v = heapTop.second.second;
+        setMark(g, v, VISITED);
+        g->parent[v] = heapTop.second.first;
+        auto wFull = g->array[v].begin();
+        while(wFull != g->array[v].end()){
+            int w = (*wFull).first;
+            if(getMark(g,w) != VISITED && g->dist[w] > g->dist[v] + (*wFull).second){
+                g->dist[w] = g->dist[v] + (*wFull).second;
+                heap.push({g->dist[w], {v,w}});
+            }
+            wFull++;
+        }
+        
     }
 
 }
