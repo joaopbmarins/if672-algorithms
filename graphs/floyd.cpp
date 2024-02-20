@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #define UNVISITED 0
 #define VISITED 1
+#define INF 1000000
 using namespace std;
 
 typedef struct{
@@ -76,14 +77,14 @@ void Floyd(Graph *g, int **dist){
                 dist[i][j] = weight(g,i,j);
             }
             else{
-                dist[i][j] = INFINITY;
+                dist[i][j] = INF;
             }
         }
     }
     for(int k=0;k<g->numNode;k++){
         for(int i=0;i<g->numNode;i++){
             for(int j=0;j<g->numNode;j++){
-                if(dist[i][k] != INFINITY && dist[k][j] != INFINITY && dist[i][j] > dist[i][k] + dist[k][j]){
+                if(dist[i][k] != INF && dist[k][j] != INF && dist[i][j] > dist[i][k] + dist[k][j]){
                     dist[i][j] = dist[i][k] + dist[k][j];
                 }
             }

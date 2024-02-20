@@ -4,12 +4,6 @@ using namespace std;
 #define VISITED 1
 #define INF 1000000
 
-/*
-
-NÃO FUNCIONA
-
-*/
-
 typedef pair<int,pair<int,int>> superPair;
 
 typedef struct{
