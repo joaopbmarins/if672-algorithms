@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define UNVISITED 0
 #define VISITED 1
-#define INF 1000000
+#define INF INT_MAX
 using namespace std;
 
 typedef struct{

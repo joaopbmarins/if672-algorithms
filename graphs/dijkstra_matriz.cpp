@@ -2,7 +2,7 @@
 using namespace std;
 #define UNVISITED 0
 #define VISITED 1
-#define INF 1000000
+#define INF INT_MAX
 
 typedef pair<int,pair<int,int>> superPair;
 
