@@ -6,7 +6,7 @@ using namespace std;
 #define endl "\n"
 
 typedef pair<int,int> pint;
-typedef pair<int,pair<int,int>> superPair;
+typedef tuple<int,int,int> triplaINT;
 
 
 typedef struct Graph{
@@ -51,27 +51,27 @@ void Prim(Graph *g){
     }
     g->dist[start] = 0;
 
-    priority_queue<superPair, vector<superPair>, greater<superPair>> heap;
-    heap.push({g->dist[start], {start, start}});
+    priority_queue<triplaINT, vector<triplaINT>, greater<triplaINT>> heap;
+    heap.push({g->dist[start], start, start});
 
     for(int i=0;i<g->numNode;i++){
-        superPair heapTop;
+        triplaINT heapTop;
         do{
             if(heap.size() == 0)
                 return;
             heapTop = heap.top();
             heap.pop();
             
-        }while(!(getMark(g,heapTop.second.second) == UNVISITED));
-        int v = heapTop.second.second;
+        }while(!(getMark(g,get<2>(heapTop)) == UNVISITED));
+        int v = get<2>(heapTop);
         setMark(g, v, VISITED);
-        g->parent[v] = heapTop.second.first;
+        g->parent[v] = get<1>(heapTop);
         auto wFull = g->array[v].begin();
         while(wFull != g->array[v].end()){
             int w = (*wFull).first;
             if(getMark(g,w) != VISITED && g->dist[w] > (*wFull).second){
                 g->dist[w] = (*wFull).second;
-                heap.push({g->dist[w], {v,w}});
+                heap.push({g->dist[w], v,w});
             }
             wFull++;
         }
