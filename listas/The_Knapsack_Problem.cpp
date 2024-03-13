@@ -3,7 +3,6 @@ using namespace std;
 #define endl "\n"
 
 int Knapsack(int n, int w, pair<int,int> itens[], vector<vector<int>> &matriz){
-
     for(int i=0;i<=n;i++){
         for(int j=0;j<=w;j++){
             if(i == 0 || j == 0){
