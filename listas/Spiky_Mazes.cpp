@@ -3,21 +3,27 @@ using namespace std;
 #define endl "\n"
 
 int row, columns, avoid_o;
-bool deu_bom = false;
 
 bool travessia(int i, int j, int avoid, vector<vector<char>> &matriz, vector<vector<bool>> &visitados){
     if(i < 0 || j < 0 || i >= row || j >= columns || matriz.at(i).at(j) == '#' || visitados.at(i).at(j)) return false;
 
     visitados.at(i).at(j) = true; 
 
-
     if(matriz.at(i).at(j) == 's') avoid--;
-    if(matriz.at(i).at(j) == 'x' && avoid_o - ((avoid_o - avoid)*2 ) >= 0 ){deu_bom = true ;return true;}
+    if(matriz.at(i).at(j) == 'x' && (avoid_o - ((avoid_o - avoid)*2 ) >= 0) ) return true;
 
-    if(travessia(i+1, j, avoid, matriz, visitados));
-    if(travessia(i-1, j, avoid, matriz, visitados));
-    if(travessia(i, j+1, avoid, matriz, visitados));
-    if(travessia(i, j-1, avoid, matriz, visitados));
+    if(travessia(i+1, j, avoid, matriz, visitados)){
+        return true;
+    };
+    if(travessia(i-1, j, avoid, matriz, visitados)){
+        return true;
+    };
+    if(travessia(i, j+1, avoid, matriz, visitados)){
+        return true;
+    };
+    if(travessia(i, j-1, avoid, matriz, visitados)){
+        return true;
+    };
 
     return false;
 }
@@ -43,13 +49,8 @@ int main(){
             if(tmp == '@') jarmtin_pos = {i,j};
         }
     }
-
-    int avoid_tmp = avoid_o;
-
-    travessia(jarmtin_pos.first, jarmtin_pos.second, avoid_tmp, matriz, visitados);
-
     
-    if(deu_bom)
+    if(travessia(jarmtin_pos.first, jarmtin_pos.second, avoid_o, matriz, visitados))
         cout << "SUCCESS\n";
     else
         cout << "IMPOSSIBLE\n";
