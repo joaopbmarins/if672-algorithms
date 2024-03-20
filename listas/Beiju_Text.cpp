@@ -80,7 +80,7 @@ char Remove(List *l){
     l->length--;
     return value;
 }
-//invencao minha e o moveToEnd tbm mas acontece
+
 void Delete_List(List *l){
     Node *tmp = l->head, *next = tmp->next;
     while(tmp->next != NULL){
